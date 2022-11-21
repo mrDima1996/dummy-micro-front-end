@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators'
 
 import {Data} from "../interfaces/data.interface";
+import {backend_url} from "../consts/urls";
 
 @Injectable()
 export class DataService {
@@ -13,6 +14,6 @@ export class DataService {
   }
 
   getData() {
-    return this.http.get<Data[]>('http://localhost:8000')
+    return this.http.get<Data[]>(backend_url)
   }
 }

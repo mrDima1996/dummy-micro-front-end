@@ -3,7 +3,8 @@ import {DataService} from "../../services/data";
 import {Observable} from "rxjs";
 import {filter} from "rxjs/operators";
 import {Data} from "../../interfaces/data.interface";
-import { loadRemoteModule, loadRemoteEntry } from '@angular-architects/module-federation';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {boston_frontend_url} from "../../consts/urls";
 
 @Component({
   selector: 'app-root',
@@ -12,14 +13,16 @@ import { loadRemoteModule, loadRemoteEntry } from '@angular-architects/module-fe
 })
 export class AppComponent {
   public tableData$: Observable<Data[]>;
-  public displayedColumns: string[] = ['position', 'name'];
-  public isLoaded = false;
+  public displayedColumns: string[] = ['position', 'name', 'cape_name', 'environment'];
+  public boston_frontend_url: SafeResourceUrl;
 
 
   @ViewChild('bostonVillains', { read: ViewContainerRef, static: true })// @ts-ignore:
   public bostonVillains: ViewContainerRef;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private domSanitizer: DomSanitizer) {
+    this.boston_frontend_url =  this.domSanitizer.bypassSecurityTrustResourceUrl(boston_frontend_url);
+
     this.tableData$ = this.dataService.getData().pipe(
       filter(data => !!data)
     );
